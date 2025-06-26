@@ -100,8 +100,6 @@ yarn start
 - `start` — Runs the compiled server in production mode.
 - `prisma:generate` — Runs `prisma generate` to regenerate the Prisma client.
 - `prisma:migrate` — Runs `prisma migrate dev` to apply migrations to the database.
-- `lint` — Runs ESLint to check code style.
-- `format` — Formats code using Prettier.
 
 ## Environment Variables
 
