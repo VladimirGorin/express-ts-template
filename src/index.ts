@@ -1,3 +1,3 @@
-import "./config";
-import "./database";
+import "./config/";
+import "./database/client";
 import "./api/";

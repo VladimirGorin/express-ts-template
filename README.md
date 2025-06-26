@@ -1,6 +1,6 @@
 # Express TypeScript Template
 
-This project is a boilerplate for building RESTful APIs using [Express](https://expressjs.com/) and [TypeScript](https://www.typescriptlang.org/). It includes basic project structure, scripts for development and production, and integration with a database.
+This project is a boilerplate for building RESTful APIs using [Express](https://expressjs.com/) and [TypeScript](https://www.typescriptlang.org/). It includes basic project structure, scripts for development and production, integration with a database, and [Prisma](https://www.prisma.io/) as an ORM.
 
 ## Features
 
@@ -8,15 +8,16 @@ This project is a boilerplate for building RESTful APIs using [Express](https://
 - TypeScript support
 - Environment variable management
 - Database integration (see below)
+- Prisma ORM integration
 - Ready-to-use scripts for development and production
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v16+ recommended)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- [Docker](https://www.docker.com/) (for running the database)
+- [Node.js](https://nodejs.org/) (v24.2.0+ recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) (v1.22.22+ recommended)
+- [Docker](https://www.docker.com/) (v28.2.2+ for running the database)
 
 ### Installation
 
@@ -43,6 +44,27 @@ docker-compose up
 ```
 
 This will start the database defined in the `docker-compose.yml` file.
+
+### Prisma
+
+This project uses [Prisma](https://www.prisma.io/) (`prisma` v6.10.1, `@prisma/client` v6.10.1) for database access.
+
+#### Main Prisma Commands:
+
+- **Generate Prisma client** (after changing the schema):
+    ```bash
+    npx prisma generate
+    ```
+
+- **Apply migrations to the database**:
+    ```bash
+    npx prisma migrate dev
+    ```
+
+- **Open Prisma Studio (GUI for working with the database):**
+    ```bash
+    npx prisma studio
+    ```
 
 ### Running the Project
 
@@ -76,6 +98,10 @@ yarn start
 - `dev` — Runs the server in development mode with hot-reloading.
 - `build` — Compiles TypeScript to JavaScript.
 - `start` — Runs the compiled server in production mode.
+- `prisma:generate` — Runs `prisma generate` to regenerate the Prisma client.
+- `prisma:migrate` — Runs `prisma migrate dev` to apply migrations to the database.
+- `lint` — Runs ESLint to check code style.
+- `format` — Formats code using Prettier.
 
 ## Environment Variables
 

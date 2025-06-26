@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { UserModel } from "../../database";
 import { successMiddleware } from "../middlewares/success.middleware";
+import { prisma } from "../../database/client";
 
 class UserController {
   async getAll(_req: Request, res: Response, next: NextFunction) {
     try {
-      const users = await UserModel.findAll();
+      const users = await prisma.user.findMany();
       successMiddleware(users, true, res);
     } catch (err) {
       next(err);
@@ -16,7 +16,10 @@ class UserController {
     try {
       const id = Number(req.params.id);
 
-      const user = await UserModel.findByPk(id);
+      const user = await prisma.user.findUnique({
+        where: { id },
+      });
+
       if (!user) return res.status(404).json({ message: "User not found" });
 
       successMiddleware(user, true, res);
@@ -28,7 +31,11 @@ class UserController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { name } = req.body;
-      const user = await UserModel.create({ name });
+
+      const user = await prisma.user.create({
+        data: { name },
+      });
+
       successMiddleware(user, true, res, 201);
     } catch (err) {
       next(err);
@@ -40,13 +47,16 @@ class UserController {
       const id = Number(req.params.id);
       const { name } = req.body;
 
-      const user = await UserModel.findByPk(id);
-      if (!user) return res.status(404).json({ message: "User not found" });
+      const existingUser = await prisma.user.findUnique({ where: { id } });
+      if (!existingUser)
+        return res.status(404).json({ message: "User not found" });
 
-      user.name = name;
-      await user.save();
+      const updatedUser = await prisma.user.update({
+        where: { id },
+        data: { name },
+      });
 
-      successMiddleware(user, true, res);
+      successMiddleware(updatedUser, true, res);
     } catch (err) {
       next(err);
     }
@@ -56,10 +66,12 @@ class UserController {
     try {
       const id = Number(req.params.id);
 
-      const user = await UserModel.findByPk(id);
-      if (!user) return res.status(404).json({ message: "User not found" });
+      const existingUser = await prisma.user.findUnique({ where: { id } });
+      if (!existingUser)
+        return res.status(404).json({ message: "User not found" });
 
-      await user.destroy();
+      await prisma.user.delete({ where: { id } });
+
       successMiddleware({ message: "User deleted" }, true, res);
     } catch (err) {
       next(err);
@@ -67,4 +79,4 @@ class UserController {
   }
 }
 
-export default new UserController();
+export const userController = new UserController();
